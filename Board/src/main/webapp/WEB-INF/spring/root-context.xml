@@ -6,9 +6,18 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
 	<!-- JDBC 설정 -->
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<!-- DataSource dataSource = new DriverManagerDataSource(oracle.jdbc.driver.OracleDriver, url, username, password) -->
+	<!-- 
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name="username" value="hr"/>
+		<property name="password" value="hr"/>
+	</bean>
+	-->
+	<bean id="dateSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:xe"/>
 		<property name="username" value="hr"/>
 		<property name="password" value="hr"/>
 	</bean>

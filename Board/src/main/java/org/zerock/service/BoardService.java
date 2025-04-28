@@ -8,16 +8,40 @@ import org.springframework.stereotype.Service;
 import org.zerock.dto.BoardVO;
 import org.zerock.repository.BoardRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BoardService {
 
-	@Autowired
-	private BoardRepository repository;
+//	@Autowired  //필드 주입
+//	private BoardRepository boardRepository;
 	
-	public List<BoardVO> boardList() {
-		
-		List<BoardVO> list = repository.getAllBoards();
-		
-		return list;
+	//위에 있는 필드 주입보다 생성자 주입을 더 많이 사용한다
+	//생성자 주입 @RequiredArgsConstructor 와 final 사용
+	private final BoardRepository boardRepository; 
+	
+	public List<BoardVO> selectListBoards() {
+		return boardRepository.selectAllBoards();
+	}
+	
+	public BoardVO selectOneByNum(int num) {
+		return boardRepository.selectOneByNum(num);
+	}
+	
+	public void insertBoard(BoardVO vo) {
+		boardRepository.insertBoard(vo);
+	}
+	
+	public void updateBoard(BoardVO vo) {
+		boardRepository.updateBoard(vo);
+	}
+	
+	public void deleteBoard(int num) {
+		boardRepository.deleteBoard(num);
+	}
+	
+	public void updateReadCount(int num) {
+		boardRepository.updateReadCount(num);
 	}
 }

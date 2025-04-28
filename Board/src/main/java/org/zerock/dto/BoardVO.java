@@ -16,5 +16,5 @@ public class BoardVO {
 	private String title;
 	private String content;
 	private int readCount;        //readcount
-	private Date writeDate;  //writedate
+	private Timestamp writeDate;  //writedate
 }
