@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.dto.BoardVO;
 import org.zerock.service.BoardService;
@@ -37,11 +39,11 @@ public class BoardController {
 	@GetMapping("/boardList")
 	public String boardList(Model model) {
 		
-		List<BoardVO> list = boardService.selectListBoards();
+		List<BoardVO> list = boardService.selectListBoards();  //DB에서 전체데이터 가져옴
 		
-		model.addAttribute("boardList", list);
+		model.addAttribute("boardList", list);  //전체데이터 boardList에 담는다
 		
-		return "boardList";
+		return "boardList";  //값을 가지고 boardList.jsp로 이동
 	}
 	
 	@GetMapping("/register")
@@ -58,4 +60,13 @@ public class BoardController {
 		boardService.insertBoard(vo);
 		return "redirect:/board/boardList";  //DB 저장 후 boardList화면으로 전환
 	}
+	
+	@GetMapping("/view") 
+	public String viewBoard(@RequestParam("num") int num, Model model) {
+		//log.info("num: " + num);  찍히는지 확인
+		BoardVO vo = boardService.selectOneByNum(num);
+		model.addAttribute("board", vo);
+		return "boardView";
+	}
+	
 }
