@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>게시글 목록</title>
 <link rel="stylesheet" type="text/css" href="../resources/css/shopping.css">
 </head>
 <body>
@@ -27,8 +27,7 @@
          <c:forEach var="board" items="${boardList}">
             <tr class="record">
                <td>${board.num}</td>
-               <td>
-               <a href="/board/view?num=${board.num}">${board.title}</a></td>
+               <td><a href="/board/view?num=${board.num}">${board.title}</a></td>
                <td>${board.name}</td>
                <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.writeDate}"/></td>
                <td>${board.readCount}</td>
