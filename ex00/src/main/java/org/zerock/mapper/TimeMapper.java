@@ -1,6 +1,9 @@
 package org.zerock.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Select;
+import org.zerock.dto.BoardVO;
 
 public interface TimeMapper {
 
@@ -9,4 +12,9 @@ public interface TimeMapper {
 	
 	public String getTime2();
 	
+	public List<BoardVO> selectAllList();
+	
+	public BoardVO selectOnByNum(int num);
+	
+	public void insertBoard(BoardVO vo);
 }
