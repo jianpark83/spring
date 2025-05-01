@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class CommonExceptionAdvice {
 
+	//예외 처리
 	@ExceptionHandler(Exception.class) //모든 예외가 터지면 Exception.class가 받겠다
 	public String except(Exception ex, Model model) {
 		
