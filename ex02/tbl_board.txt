@@ -26,3 +26,5 @@ SELECT constraint_name
 FROM user_constraints
 WHERE table_name = 'BOARD'
 AND constraint_type = 'P';  --board 테이블 기본키 조회
+
+select * from tbl_board where bno > 0;  --인덱스 통해서 조회(검색속도 향상)
