@@ -10,8 +10,9 @@
   </select>
   
   <select id="getList" resultType="org.zerock.domain.BoardVO">
-    <!-- 인덱스 통해서 조회(검색속도 향상) -->
-    select * from tbl_board where bno > 0  
+   <!-- 인덱스 통해서 조회(검색속도 향상) / 오름차순 정렬 -->
+   <!-- select * from tbl_board where bno > 0 -->
+   select * from tbl_board where bno > 0 order by bno asc
   </select>
   
   <insert id="insert">

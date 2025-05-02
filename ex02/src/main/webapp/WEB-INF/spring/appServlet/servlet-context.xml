@@ -21,9 +21,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<!-- Web에서 사용하는 거 bean 등록 -->
 	<context:component-scan base-package="org.zerock.controller" />
-	<context:component-scan base-package="org.zerock.service" />
-	
-	
 	
 </beans:beans>

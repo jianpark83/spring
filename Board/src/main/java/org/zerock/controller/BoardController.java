@@ -47,7 +47,7 @@ public class BoardController {
 	public String register() {
 		return "boardregister";
 	}
-	
+
 	//JSP에서는 get로 입력받고 set로 DB에 저장하는 코딩을 직접 했었음. 하지만 스프링에서는
 	//게시글 등록에서 데이터 입력 후 등록을 하면 자동으로 맵핑을 해준다
 	//단, 자동으로 맵핑이 되려면 BoardVO에 있는 이름과 register.jsp에 있는 이름이 같아야 한다(setter로 등록)
