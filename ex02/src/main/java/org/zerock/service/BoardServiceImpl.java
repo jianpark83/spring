@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
 import org.zerock.mapper.BoardMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public boolean modify(BoardVO board) {
 		log.info("modify............");
-		return mapper.update(board) == 1;  //mapper.update(board) -> 1일 경우 true (update가 안되면 0값이 도출되기 때문에)
+		return mapper.update(board) == 1;                     //mapper.update(board) -> 1일 경우 true (update가 안되면 0값이 도출되기 때문에)
 	}
 
 	@Override
@@ -42,9 +43,8 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<BoardVO> getList() {
+	public List<BoardVO> getList(Criteria cri) {
 		log.info("getList.................");
-		return mapper.getList();
+		return mapper.getListWithPaging(cri);
 	}
-
 }

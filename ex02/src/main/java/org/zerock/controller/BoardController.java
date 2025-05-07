@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
+import org.zerock.domain.PageDTO;
 import org.zerock.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,10 +25,13 @@ public class BoardController {
 	private final BoardService service;
 	
 	@GetMapping("/list")
-	public void list(Model model) {
-		log.info("list..........");
-		List<BoardVO> list = service.getList();
+	public void list(Criteria cri, Model model) {
+		log.info("list.........." + cri);
+		
+		List<BoardVO> list = service.getList(cri);
 		model.addAttribute("list", list);
+		
+		model.addAttribute("pageMaker", new PageDTO(cri, 172));
 	}
 	
 	@GetMapping("/register")
@@ -51,13 +56,15 @@ public class BoardController {
 	@GetMapping({"/get", "/modify"})
 	public void get(@RequestParam Long bno, Model model) {
 		log.info("get...modify.......");
-		model.addAttribute("board",service.get(bno));
+		
+		model.addAttribute("board",service.get(bno));  
 	}
 	
 	@PostMapping("/remove")
 	public String remove(Long bno, RedirectAttributes rttr) {
 		log.info("remove..........");
-		service.remove(bno);
+		
+		service.remove(bno);  //삭제
 		rttr.addFlashAttribute("result", "삭제가 완료되었습니다.");
 		return "redirect:/board/list";
 	}
@@ -65,9 +72,9 @@ public class BoardController {
 	@PostMapping("/modify")
 	public String modify(BoardVO board, RedirectAttributes rttr) {
 		log.info("modify..........");
-		service.modify(board);
+		
+		service.modify(board);  //수정
 		rttr.addFlashAttribute("result", "수정이 완료되었습니다.");
 		return "redirect:/board/list";
-	}
-	
+	}	
 }
