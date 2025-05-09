@@ -21,6 +21,11 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
             	<form role="form" action="/board/modify" method="post">
+            	
+            	<!-- 수정,삭제 버튼 클릭 시 pageNum, amount값 전달 -->
+            	<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
+                <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>         
+            	
  					<div class="form-group">
  						<label>Bno</label>
  						<input class="form-control" name="bno" value="<c:out value='${board.bno}'/>" readonly="readonly">
@@ -67,11 +72,16 @@ $(document).ready(function() {
 			formObj.attr("action", "/board/remove")
 		}else if(operation === 'list'){
 			formObj.attr("action", "/board/list").attr("method", "get");
-			formObj.empty();  //다른 값들은 가져가지 않는다
+			//수정화면에서 리스트 클릭시 pageNum, amout값을 가지고 간다
+			let pageNumTag = $("input[name='pageNum']").clone();
+			let amountTag = $("input[name='amount']").clone();
+			
+			formObj.empty();  //input 태그 name 속성값을 클리어
+			formObj.append(pageNumTag);
+			formObj.append(amountTag);
 		}
 		formObj.submit();
 	});
-	
 });
 </script>
 

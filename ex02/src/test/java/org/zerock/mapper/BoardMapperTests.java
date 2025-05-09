@@ -2,7 +2,9 @@ package org.zerock.mapper;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -82,4 +84,45 @@ public class BoardMapperTests {
 		
 		list.forEach(board -> log.info(board));
 	}
+	
+	@Test
+	public void testSearch() {
+		Map<String, String> map = new HashMap<String, String>();
+		
+		map.put("T", "스프링");
+		map.put("C", "수정 내용");
+		map.put("W", "테스트");
+		
+		//   key,      value
+		Map<String, Map<String, String>> outer = new HashMap<>();  //outer가 위 값을 다 가지고 있다(map.put("T", "어버이날");,map.put("C", "은혜");,map.put("W", "홍길동");)
+		
+		outer.put("map", map);
+//		log.info(outer.get("map"));
+//		log.info((outer.get("map")).get("T"));
+		List<BoardVO> list = mapper.searchTest(outer);
+		
+		log.info("------------------------");
+		log.info(list);
+	}
+	
+	@Test
+	public void testSearch2() {
+		Criteria cri = new Criteria();
+		
+		cri.setKeyword("수정");
+		cri.setType("TW");  //type를 배열값으로
+		
+		mapper.getListWithPaging(cri).forEach(board -> log.info(board));
+	}
+	
+	@Test
+	public void testTotalCount() {
+		Criteria cri = new Criteria();
+		
+		cri.setKeyword("수정");
+		cri.setType("TW");  
+		
+		log.info("total count : ");
+		log.info(mapper.getTotalCount(cri));
+	}	
 }
