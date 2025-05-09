@@ -24,7 +24,10 @@
             	
             	<!-- 수정,삭제 버튼 클릭 시 pageNum, amount값 전달 -->
             	<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
-                <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>         
+                <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>  
+                <!-- 수정,삭제 버튼 클릭 시 type, keyword값 전달 -->   
+                <input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>       	
+                <input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'>     	          
             	
  					<div class="form-group">
  						<label>Bno</label>
@@ -72,13 +75,17 @@ $(document).ready(function() {
 			formObj.attr("action", "/board/remove")
 		}else if(operation === 'list'){
 			formObj.attr("action", "/board/list").attr("method", "get");
-			//수정화면에서 리스트 클릭시 pageNum, amout값을 가지고 간다
+			//수정화면에서 리스트 클릭시 pageNum, amout, type, keyword값을 가지고 간다
 			let pageNumTag = $("input[name='pageNum']").clone();
 			let amountTag = $("input[name='amount']").clone();
+			let typeTag = $("input[name='type']").clone();
+			let keywordTag = $("input[name='keyword']").clone();
 			
 			formObj.empty();  //input 태그 name 속성값을 클리어
 			formObj.append(pageNumTag);
 			formObj.append(amountTag);
+			formObj.append(typeTag);
+			formObj.append(keywordTag);
 		}
 		formObj.submit();
 	});

@@ -96,6 +96,7 @@
   	]]>
   	<trim suffix="and">
   	                                                  <!-- or 연산이 먼저 처리되게 하기 위해 괄호()를 open, close로 묶어준다 -->
+  	                                                  <!-- 아래 구문 중 하나라도 충족시 작동() -->  	                                                
 	  	<foreach collection="map" index="key" item="val" separator="or" open="(" close=")">
 	  		<if test="key=='T'.toString()">
 	  			title like #{val}
