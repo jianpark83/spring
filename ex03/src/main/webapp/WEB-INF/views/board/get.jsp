@@ -58,9 +58,48 @@
 </div>
 <!-- /.row -->
 
+<script type="text/javascript" src="/resources/js/reply.js"></script>
+
+<script type="text/javascript">
+	let bnoValue = '<c:out value="${board.bno}" />';
+	
+	
+	/*
+	//6번 댓글 삭제 테스트
+	replyService.remove(6, 
+		function(count) {
+			if(count == 'success'){
+				alert("삭제 성공");
+			}
+		},
+		function(err) {
+			alert("ERROR...." + err);
+		}
+	)
+	//전체 데이터 가져오기 테스트
+	replyService.getList(
+			{bno: bnoValue, page:1},
+			function(list) {
+				for(let i=0; i<list.length; i++){
+					console.log(list[i]);
+				}
+			}
+	);
+	//등록 테스트
+	replyService.add(
+			{reply:"JS Test", replyer:"tester", bno:bnoValue},
+			function(result) {
+				alert("Result : " + result);
+			}
+	);
+	*/
+</script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		let operForm = $("#operForm");
+		
+		console.log(replyService);
 		
 		$("button[data-oper='modify']").on("click", function(e){
 			operForm.attr("action", "/board/modify").submit();
