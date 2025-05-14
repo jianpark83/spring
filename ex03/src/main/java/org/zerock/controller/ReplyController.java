@@ -22,8 +22,8 @@ import lombok.extern.log4j.Log4j;
 
 @RestController
 @RequiredArgsConstructor
-@Log4j
 @RequestMapping("/replies")
+@Log4j
 public class ReplyController {
 
 	private final ReplyService service;
@@ -32,25 +32,26 @@ public class ReplyController {
 	@PostMapping(value = "/new")       //@RequestBody: json객체를 java로 변환
 	public ResponseEntity<String> create(@RequestBody ReplyVO vo){
 		log.info("ReplyVO : + vo");
+		
 		int insertCount = service.register(vo);
 		
 		if(insertCount == 1) {
 			//저장 성공
 			return new ResponseEntity<>("success", HttpStatus.OK);
 		}else {
-			//저장 실패
+			//저장실패
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	//2. 전체 데이터 가져오기
-	@GetMapping(value = "/pages/{bno}/{page}", 
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/pages/{bno}/{page}",
+				produces = MediaType.APPLICATION_JSON_VALUE )
 	public ResponseEntity<List<ReplyVO>> getList(
 			@PathVariable("bno") Long bno, 
 			@PathVariable("page") int page
 			){
-		log.info("getList............");
+		log.info("getList........");
 		
 		Criterial cri = new Criterial(page, 10);
 		
@@ -58,40 +59,34 @@ public class ReplyController {
 	}
 	
 	//3. 단건 데이터 가져오기
-	@GetMapping(value = "/{rno}", 
+	@GetMapping(value = "/{rno}",
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<ReplyVO> get(@PathVariable("rno") Long rno){
-		log.info("get............" + rno);
+		log.info("get..........." + rno);
 		
 		return new ResponseEntity<ReplyVO>(service.get(rno), HttpStatus.OK);
 	}
 	
 	//4. 삭제하기
-	@DeleteMapping(value = "/{rno}", 
-			produces = {MediaType.TEXT_PLAIN_VALUE})
+	@DeleteMapping(value = "/{rno}", produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> remove(@PathVariable("rno") Long rno){
+		log.info("remove : "+ rno);
 		
-		log.info("remove : " + rno);
-		
-		return service.remove(rno) == 1 
-				? new ResponseEntity<String>("success", HttpStatus.OK) 
-				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		return service.remove(rno) == 1 ? new ResponseEntity<String>("success", HttpStatus.OK)
+										: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);	
 	}
 	
 	//5. 수정하기(reply)
 	@RequestMapping(method   = {RequestMethod.PUT, RequestMethod.PATCH},
-			value = "/{rno}",
-			consumes = "application/json",
-			produces = {MediaType.TEXT_PLAIN_VALUE})
+					value = "/{rno}",
+					consumes = "application/json",
+					produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> modify(@RequestBody ReplyVO vo, @PathVariable("rno") Long rno){
-
+		
 		vo.setRno(rno);
 		log.info("modify : " + rno);
-
-		return service.modify(vo) == 1 
-				? new ResponseEntity<String>("success", HttpStatus.OK)
+		
+		return service.modify(vo) == 1 ? new ResponseEntity<String>("seccess", HttpStatus.OK)
 				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);	
-}
-	
-	
+	}
 }
