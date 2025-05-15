@@ -69,4 +69,14 @@ public class ReplyMapperTests {
 		mapper.getListWithPaging(cri, bno)
 		.forEach(reply -> log.info(reply));
 	}
+	
+	@Test
+	public void testList2() {
+		Criterial cri = new Criterial(2,3);  //2page, 3개씩
+		
+		mapper.getListWithPaging(cri, 1835048L)
+		.forEach(list -> log.info(list));
+	}
+	
+
 }

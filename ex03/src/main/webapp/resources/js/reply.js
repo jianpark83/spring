@@ -37,7 +37,7 @@ let replyService = (function(){
 
             success: function(result, status, xhr){
                 if(callback){
-                    callback(result);
+                    callback(result.replyCnt, result.list);
                 }
             },
             error: function(xhr, status, er){
