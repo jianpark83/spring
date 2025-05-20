@@ -40,41 +40,44 @@ public class ReviewControllerTests {
 	@Test
 	public void testList() throws Exception {
 		log.info(
-				mockMvc.perform(MockMvcRequestBuilders.get("/board/list"))
+				mockMvc.perform(MockMvcRequestBuilders.get("/review/list"))
+				.andReturn()
+				.getModelAndView()
+				.getModelMap());
+	}
+	
+	@Test
+	public void testRegister() throws Exception {
+		String resultPage = mockMvc.perform(MockMvcRequestBuilders
+				.post("/review/register")
+				.param("review_title", "20250520테스트")
+				.param("restaurant_name", "새로운 가게")
+				.param("review_content", "테스트 새글 내용")
+				.param("writer_name", "20250520작성자")
+				.param("rating", "4")
+				.param("region", "서울"))
+			.andReturn()
+			.getResponse()  // 🔥 response 객체로 접근!
+			.getRedirectedUrl();  // 🔥 redirect된 URL을 직접 확인
+
+		log.info("==========> redirected to: " + resultPage);
+	}
+	
+	@Test
+	public void testget() throws Exception {
+		log.info(
+				mockMvc.perform(MockMvcRequestBuilders.get("/review/get")
+				.param("review_id", "5"))
 				.andReturn()
 				.getModelAndView()
 				.getModelMap());
 	}
 
 	@Test
-	public void testRegister() throws Exception{
-		String resultPage = mockMvc.perform(MockMvcRequestBuilders
-				.post("/board/register")
-				.param("title", "테스트 새글 제목")
-				.param("content", "테스트 새글 내용")
-				.param("writer", "테스트 새글 작성자"))
-				.andReturn()
-				.getModelAndView()
-				.getViewName();
-		
-		log.info("==========>" + resultPage);
-	}
-	
-	@Test
-	public void testget() throws Exception {
-		log.info(
-				mockMvc.perform(MockMvcRequestBuilders.get("/board/get")
-				.param("bno", "6"))
-				.andReturn()
-				.getModelAndView()
-				.getModelMap());
-	}
-	
-	@Test
 	public void testDelete() throws Exception{
 		String resultPage = mockMvc.perform(MockMvcRequestBuilders
-				.post("/board/remove")
-				.param("bno", "16"))
+				.post("/review/remove")
+				.param("review_id", "103"))
 				.andReturn()
 				.getModelAndView()
 				.getViewName();
@@ -82,18 +85,23 @@ public class ReviewControllerTests {
 		log.info("==========>" + resultPage);
 	}
 	
+	
 	@Test
-	public void testModify() throws Exception{
+	public void testModify() throws Exception {
 		String resultPage = mockMvc.perform(MockMvcRequestBuilders
-				.post("/board/modify")
-				.param("title", "수정 새글 제목")
-				.param("content", "수정 새글 내용")
-				.param("writer", "수정 새글 작성자")
-				.param("bno", "14"))
-				.andReturn()
-				.getModelAndView()
-				.getViewName();
+				.post("/review/modify")
+				.param("review_id", "3") 
+				.param("review_title", "수정 삼겹살 끝판왕")
+				.param("restaurant_name", "수정 고기 천국")
+				.param("review_content", "수정 전체적으로 만족스러웠어요")
+				.param("writer_name", "수정 서준")
+				.param("rating", "5")
+				.param("region", "서울"))
+			.andReturn()
+			.getModelAndView()
+			.getViewName();
 		
-		log.info("==========>" + resultPage);
+		log.info("==========> " + resultPage);
 	}
+
 }

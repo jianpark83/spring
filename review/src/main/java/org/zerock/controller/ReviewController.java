@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 @Controller
-@RequestMapping("/board")
+@RequestMapping("/review")
 @RequiredArgsConstructor
 @Log4j
 public class ReviewController {
@@ -41,13 +41,15 @@ public class ReviewController {
 	}
 	
 	@PostMapping("/register")
-	public String register(ReviewVO board, RedirectAttributes rttr) {
+	public String register(ReviewVO review, RedirectAttributes rttr) {
 		log.info("resister..........");
-		service.register(board);
+		service.register(review);
 		
-		rttr.addFlashAttribute("result", board.getReview_id());
-		
-		return "redirect:/board/list";
+		rttr.addFlashAttribute("result", review.getReview_id());
+		 // 로그로 result 확인
+	    log.info("result ID: " + review.getReview_id());
+	    
+		return "redirect:/review/list";
 	  //DB의 변경이 일어나면 redirect방식으로 반드시 화면전환을 시켜야 한다(도배방지)
 	  //PRG 패턴 : Post -> Redirect -> Get 
 	  //PRG 패턴을 사용하는 이유는 멱등성 때문에
@@ -56,18 +58,18 @@ public class ReviewController {
 	}
 	
 	@GetMapping({"/get", "/modify"})
-	public void get(@RequestParam Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
+	public void get(@RequestParam Long review_id, @ModelAttribute("cri") Criteria cri, Model model) {
 		log.info("get...modify.......");
 		
-		model.addAttribute("board",service.get(bno));  
+		model.addAttribute("review",service.get(review_id));  
 	  //model.addAttribute("cri", cri);
 	}
 	
 	@PostMapping("/remove")
-	public String remove(Long bno, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+	public String remove(Long review_id, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		log.info("remove..........");
 		
-		service.remove(bno);  //삭제
+		service.remove(review_id);  //삭제
 		rttr.addFlashAttribute("result", "삭제가 완료되었습니다.");
 		
 		rttr.addAttribute("pageNum", cri.getPageNum());
@@ -75,14 +77,14 @@ public class ReviewController {
 		rttr.addAttribute("type", cri.getType());
 		rttr.addAttribute("keyword", cri.getKeyword());
 		
-		return "redirect:/board/list";
+		return "redirect:/review/list";
 	}
 	
 	@PostMapping("/modify")
-	public String modify(ReviewVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+	public String modify(ReviewVO review, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		log.info("modify..........");
 		
-		service.modify(board);  //수정
+		service.modify(review);  //수정
 		rttr.addFlashAttribute("result", "수정이 완료되었습니다.");
 		
 		rttr.addAttribute("pageNum", cri.getPageNum());
@@ -90,9 +92,10 @@ public class ReviewController {
 		rttr.addAttribute("type", cri.getType());
 		rttr.addAttribute("keyword", cri.getKeyword());
 		
-		return "redirect:/board/list";
+		return "redirect:/review/list";
 	}	
 	
+
 	@GetMapping("/exUpload")
 	public void exUpload() {
 		log.info("exUpload.........");
