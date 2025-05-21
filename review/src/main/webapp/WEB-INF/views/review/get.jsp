@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../resources/css/get_css.css">
-    <script src="script/jquery-1.12.3.js"></script>
-    <script src="script/get_script.js"></script>
+    <script src="/resources/script/jquery-1.12.3.js"></script> <!-- 수정됨: 절대경로 사용 -->
+    <script src="/resources/script/list_script.js"></script> <!-- 수정됨: 절대경로 사용 -->
 </head>
 <body>
 
@@ -94,7 +94,8 @@
                         <h3>${review.review_title}</h3>
                         <div class="edit-actions">
 		                    <button type="button" class="btn-list"  onclick="location.href='/review/list';">리스트</button>
-		                    <button type="button" class="btn-modifty" onclick="location.href='/review/modify?review_id=${review.review_id}';">수정</button>
+		                    <button type="button" class="btn-modifty" 
+		                    onclick="location.href='/review/modify?review_id=${review.review_id}&pageNum=${cri.pageNum}&amount=${cri.amount}&type=${cri.type}&keyword=${cri.keyword}';">수정</button>
 	               		</div>
                         
                         

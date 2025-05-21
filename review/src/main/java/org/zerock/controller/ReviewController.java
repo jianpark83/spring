@@ -61,6 +61,8 @@ public class ReviewController {
 	public void get(@RequestParam Long review_id, @ModelAttribute("cri") Criteria cri, Model model) {
 		log.info("get...modify.......");
 		
+		service.updateCount(review_id);  //조회수 증가
+		
 		model.addAttribute("review",service.get(review_id));  
 	  //model.addAttribute("cri", cri);
 	}
@@ -94,7 +96,6 @@ public class ReviewController {
 		
 		return "redirect:/review/list";
 	}	
-	
 
 	@GetMapping("/exUpload")
 	public void exUpload() {

@@ -53,4 +53,9 @@ public class ReviewServiceImpl implements ReviewService{
 		log.info("getTotal............");
 		return mapper.getTotalCount(cri);
 	}
+	
+	@Override
+	public void updateCount(Long review_id) {
+	    mapper.updateCount(review_id);
+	}
 }

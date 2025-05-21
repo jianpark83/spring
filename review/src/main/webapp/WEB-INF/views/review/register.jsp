@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../resources/css/writer_css.css">
-    <script src="script/jquery-1.12.3.js"></script>
-    <script src="script/writer_script.js"></script>
+    <script src="/resources/script/jquery-1.12.3.js"></script> <!-- 수정됨: 절대경로 사용 -->
+    <script src="/resources/script/list_script.js"></script> <!-- 수정됨: 절대경로 사용 -->
 </head>
 <body>
 

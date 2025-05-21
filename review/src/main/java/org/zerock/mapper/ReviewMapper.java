@@ -25,4 +25,6 @@ public interface ReviewMapper {
 	public int getTotalCount(Criteria cri);
 	
 	public List<ReviewVO> searchTest(Map<String, Map<String,String>> map);
+	
+	public void updateCount(Long review_id);
 }

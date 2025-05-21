@@ -2,16 +2,15 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../resources/css/writer_css.css">
-    <script src="script/jquery-1.12.3.js"></script>
-    <script src="script/writer_script.js"></script>
+    <link rel="stylesheet" href="../resources/css/modify_css.css">
+    <script src="/resources/script/jquery-1.12.3.js"></script> <!-- 수정됨: 절대경로 사용 -->
+    <script src="/resources/script/list_script.js"></script> <!-- 수정됨: 절대경로 사용 -->
 </head>
 <body>
 
@@ -90,7 +89,22 @@
     <div id="list">
     
     <main class="content">
-        <form class="main-card" action="/review/register" method="post">
+        <form class="main-card" method="post">
+        
+        <!-- 수정,삭제 버튼 클릭 시 pageNum, amount값 전달 -->
+    	<%-- <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
+        <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>  
+        <!-- 수정,삭제 버튼 클릭 시 type, keyword값 전달 -->   
+        <input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>       	
+        <input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'> --%>
+        
+        <input type="hidden" name="pageNum" value="${cri.pageNum}" />
+        <input type="hidden" name="amount" value="${cri.amount}" />
+        <input type="hidden" name="type" value="${cri.type}" />
+        <input type="hidden" name="keyword" value="${cri.keyword}" />
+        
+        
+        <input type="hidden" name="review_id" value="${review.review_id}"/> 
         
         <!-- 제목 -->
         <label for="review_title"><strong>제목:</strong></label>
@@ -132,9 +146,10 @@
         <input type="file" id="review-img" name="review-img" accept="image/*" />
 
         <!-- 제출 버튼 -->
-        <div class="edit-actions">
-            <button type="submit" class="btn-update">수 정</button>
-            <button type="button" class="btn-delete">삭 제</button>
+         <div class="edit-actions">
+            <button type="button" data-oper='modify' class="btn-update">수정</button>
+            <button type="button" data-oper='remove' class="btn-delete">삭제</button>
+            <button type="button" data-oper='list' class="btn-writer">리스트</button>
         </div>
         </form>
 
@@ -143,6 +158,35 @@
         </div>
         </div>
     </div> 
+
+<script src="/resources/script/jquery-1.12.3.js"></script>
+
+<script>
+$(document).ready(function () {
+    const formObj = $("form");
+
+    $(".edit-actions button").on("click", function (e) {
+        e.preventDefault(); // submit 막기
+
+        const oper = $(this).data("oper");
+
+        if (oper === 'modify') {
+            formObj.attr("action", "/review/modify");
+            formObj.submit();
+
+        } else if (oper === 'remove') {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                formObj.attr("action", "/review/remove");
+                formObj.submit();
+            }
+
+        } else if (oper === 'list') {
+            // form submit 필요 없이 그냥 이동
+            location.href = "/review/list";
+        }
+    });
+});
+</script>
 
 </body>
 </html>

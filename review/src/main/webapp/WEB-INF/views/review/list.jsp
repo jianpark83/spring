@@ -8,9 +8,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../resources/css/list_css.css">
-    <script src="script/jquery-1.12.3.js"></script>
-    <script src="script/list_script.js"></script>
+   <!-- <link rel="stylesheet" href="../resources/css/list_css.css"> --> 
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/list_css.css">
+    <script src="/resources/script/jquery-1.12.3.js"></script> <!-- 수정됨: 절대경로 사용 -->
+    <script src="/resources/script/list_script.js"></script> <!-- 수정됨: 절대경로 사용 -->
 </head>
 <body>
 
@@ -89,16 +90,26 @@
         <h1 class="main-title">맛ZON</h1>
         <div id="list">
 
-        <div class="controls">
-        <div class="dropdown">
-          <button class="dropbtn"><a href="/review/register" class="dropbtn">리뷰 등록</a></button>
-        </div>
+		<div class="controls">
+		  <div class="dropdown">
+		    <a href="/review/register" class="dropbtn">리뷰 등록</a> <!-- a 태그만 남기기 -->
+		  </div>
+		
+		  <div class="search">
+		    <form action="/review/list" id="searchForm" method="get" style="display: flex; gap: 8px;">
+		      <select name="type">
+		        <option value="" <c:if test="${empty pageMaker.cri.type}">selected</c:if>>--</option>
+		        <option value="T" <c:if test="${pageMaker.cri.type == 'T'}">selected</c:if>>제목</option>
+		        <option value="C" <c:if test="${pageMaker.cri.type == 'C'}">selected</c:if>>내용</option>
+		        <option value="W" <c:if test="${pageMaker.cri.type == 'W'}">selected</c:if>>작성자</option>
+		        <option value="R" <c:if test="${pageMaker.cri.type == 'R'}">selected</c:if>>지역</option>
+		      </select>
+		      <input type="text" name="keyword" placeholder="리뷰 검색..." value="${pageMaker.cri.keyword}" />
+		      <button type="submit" id="searchBtn">검색</button>
+		    </form>
+		  </div>
+		</div>
 
-        <div class="search">
-          <input type="text" id="searchInput" placeholder="리뷰 검색..." />
-          <button id="searchBtn">검색</button>
-        </div>
-      </div>
       
         <table>
         <thead>
@@ -108,29 +119,32 @@
             <th>제목</th>
             <th>작성자</th>
             <th>게시날</th>
-            <th>내용</th>
+            <th>조회수</th>
             </tr>
         </thead>
-        <tbody id="reviewTableBody"></tbody>
+       <tbody>
         <c:forEach var="review" items="${list}">
-   			 <tr>
-        		<td><c:out value="${review.review_id}" /></td>               
+             <tr>
+                <td><c:out value="${review.review_id}" /></td>
 
-        		<td>
-            		<a class="move" href="${pageContext.request.contextPath}/review/get?review_id=${review.review_id}">
-                	<c:out value="${review.region}"/></a>
-        		</td>
-        
-        		<td>
-            		<a class="move" href="${pageContext.request.contextPath}/review/get?review_id=${review.review_id}">
-                	<c:out value="${review.review_title}"/></a>
-        		</td>
-        
-        		<td><c:out value="${review.writer_name}" /></td>
-        		<td><fmt:formatDate pattern="yyyy-MM-dd" value="${review.register_date}"/></td>
-    		</tr>
-		</c:forEach>
-     
+                <!-- 수정됨: pageNum, amount, type, keyword 전달 추가 -->
+                <td>
+                    <a class="move" href="${pageContext.request.contextPath}/review/get?review_id=${review.review_id}&pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}&type=${pageMaker.cri.type}&keyword=${pageMaker.cri.keyword}">
+                    <c:out value="${review.region}"/></a>
+                </td>
+
+                <!-- 수정됨: pageNum, amount, type, keyword 전달 추가 -->
+                <td>
+                    <a class="move" href="${pageContext.request.contextPath}/review/get?review_id=${review.review_id}&pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}&type=${pageMaker.cri.type}&keyword=${pageMaker.cri.keyword}">
+                    <c:out value="${review.review_title}"/></a>
+                </td>
+
+                <td><c:out value="${review.writer_name}" /></td>
+                <td><fmt:formatDate pattern="yyyy-MM-dd" value="${review.register_date}"/></td>
+                <td><c:out value="${review.count}" /></td>
+            </tr>
+        </c:forEach>
+     </tbody>
         </table> 
 			 <!-- 페이징 처리 -->
 			<div class="pagination">
@@ -155,5 +169,13 @@
         </div> <!-- #list -->
         </div>
     </div> 
+    
+<script>
+  document.querySelector("#searchBtn").addEventListener("click", function (e) {
+    const form = document.querySelector("#searchForm");
+    form.submit(); // 기본 동작
+  });
+</script>    
+    
 </body>
 </html>
