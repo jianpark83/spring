@@ -98,13 +98,15 @@
 		  <div class="search">
 		    <form action="/review/list" id="searchForm" method="get" style="display: flex; gap: 8px;">
 		      <select name="type">
-		        <option value="" <c:if test="${empty pageMaker.cri.type}">selected</c:if>>--</option>
-		        <option value="T" <c:if test="${pageMaker.cri.type == 'T'}">selected</c:if>>제목</option>
-		        <option value="C" <c:if test="${pageMaker.cri.type == 'C'}">selected</c:if>>내용</option>
-		        <option value="W" <c:if test="${pageMaker.cri.type == 'W'}">selected</c:if>>작성자</option>
-		        <option value="R" <c:if test="${pageMaker.cri.type == 'R'}">selected</c:if>>지역</option>
+		        <option value="" <c:out value="${pageMaker.cri.type == null ? 'selected' : '' }" />>--</option>
+		        <option value="T" <c:out value="${pageMaker.cri.type == 'T' ? 'selected' : '' }" />>제목</option>
+		        <option value="C" <c:out value="${pageMaker.cri.type == 'C' ? 'selected' : '' }" />>내용</option>
+		        <option value="W" <c:out value="${pageMaker.cri.type == 'W' ? 'selected' : '' }" />>작성자</option>
+		        <option value="R" <c:out value="${pageMaker.cri.type == 'R' ? 'selected' : '' }" />>지역</option>
 		      </select>
-		      <input type="text" name="keyword" placeholder="리뷰 검색..." value="${pageMaker.cri.keyword}" />
+		      <input type="text" name="keyword" placeholder="리뷰 검색..." value = <c:out value="${pageMaker.cri.keyword}" />>
+		      <input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum}'>
+              <input type="hidden" name="amount" value='${pageMaker.cri.amount}'>
 		      <button type="submit" id="searchBtn">검색</button>
 		    </form>
 		  </div>
@@ -150,19 +152,22 @@
 			<div class="pagination">
 			    <!-- 이전 버튼 -->
 			    <c:if test="${pageMaker.prev}">
-			        <a href="/review/list?pageNum=${pageMaker.startPage-1}&amount=${pageMaker.cri.amount}" class="pagination-button">이전</a>
+			        <a href="/review/list?pageNum=${pageMaker.startPage-1}&amount=${pageMaker.cri.amount}
+			        &type=${pageMaker.cri.type}&keyword=${pageMaker.cri.keyword}" class="pagination-button">이전</a>
 			    </c:if>
 			
 			    <!-- 페이지 번호 -->
 			    <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}" step="1">
-			        <a href="/review/list?pageNum=${num}&amount=${pageMaker.cri.amount}" class="pagination-button ${pageMaker.cri.pageNum == num ? 'active' : ''}">
+			        <a href="/review/list?pageNum=${num}&amount=${pageMaker.cri.amount}&type=${pageMaker.cri.type}
+			        &keyword=${pageMaker.cri.keyword}" class="pagination-button ${pageMaker.cri.pageNum == num ? 'active' : ''}">
 			            ${num}
 			        </a>
 			    </c:forEach>
 			
 			    <!-- 다음 버튼 -->
 			    <c:if test="${pageMaker.next}">
-			        <a href="/review/list?pageNum=${pageMaker.endPage+1}&amount=${pageMaker.cri.amount}" class="pagination-button">다음</a>
+			        <a href="/review/list?pageNum=${pageMaker.endPage+1}&amount=${pageMaker.cri.amount}&type=${pageMaker.cri.type}
+			        &keyword=${pageMaker.cri.keyword}" class="pagination-button">다음</a>
 			    </c:if>
 			</div>
 

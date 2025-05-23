@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-    </div>
-    <!-- /#page-wrapper -->
+    
+ 		</div>
+     <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
+
     <!-- jQuery -->
     <!-- <script src="/resources/vendor/jquery/jquery.min.js"></script> -->
 
@@ -28,12 +29,13 @@
         $('#dataTables-example').DataTable({
             responsive: true
         });
-        $(".sidebar-nav")
-        .attr("class","sidebar-nav navbar-collapse collapse")
-        .attr("aria-expanded",'false')
-        .atrr("style","height:1px");
+        $(".sidebar-nav")	
+        .attr("class", "sidevar-nav navbar-collapse collapse")
+        .attr("aria-expanded", 'false')
+        .attr("sytle", "height:1px");
     });
     </script>
+
 </body>
+
 </html>
-    

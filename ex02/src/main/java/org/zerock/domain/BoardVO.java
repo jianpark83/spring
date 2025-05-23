@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
     title varchar2(200) not null,
     content varchar2(2000) not null,
     writer varchar2(50) not null,
-    regdate date default sysdate,    --작성일
-    updatedate date default sysdate  --수정일
+    regdate date default sysdate, --작성일
+    updatedate date default sysdate --수정일    
 );
-*/
+ */
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class BoardVO {
 	private Long bno;
 	private String title;
@@ -29,5 +29,4 @@ public class BoardVO {
 	private String writer;
 	private Date regDate;
 	private Date updateDate;
-
 }

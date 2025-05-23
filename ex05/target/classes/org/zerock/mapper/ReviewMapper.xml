@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.mapper.ReviewMapper">
+
+  <!-- ✅ resultMap 정의 -->
+  <resultMap id="reviewMap" type="org.zerock.domain.ReviewVO">
+    <id property="review_id" column="REVIEW_ID" />
+    <result property="review_title" column="REVIEW_TITLE" />
+    <result property="restaurant_name" column="RESTAURANT_NAME" />
+    <result property="review_content" column="REVIEW_CONTENT" />
+    <result property="writer_name" column="WRITER_NAME" />
+    <result property="register_date" column="REGISTER_DATE" />
+    <result property="rating" column="RATING" />
+    <result property="count" column="COUNT" />
+    <result property="region" column="REGION" />
+    <result property="fileName" column="filename" />
+  </resultMap>
+
+  <!-- 🔍 검색 조건 SQL -->
+<sql id="criterial">
+  <trim prefix="(" suffix=")" prefixOverrides="OR">
+    <foreach collection="typeArr" item="type" separator=" OR ">
+      <choose>
+        <when test='type == "T"'>
+          review_title LIKE '%' || #{keyword} || '%'
+        </when>
+        <when test='type == "C"'>
+          review_content LIKE '%' || #{keyword} || '%'
+        </when>
+        <when test='type == "W"'>
+          writer_name LIKE '%' || #{keyword} || '%'
+        </when>
+        <when test='type == "R"'>
+          region LIKE '%' || #{keyword} || '%'
+        </when>
+      </choose>
+    </foreach>
+  </trim>
+</sql>
+  
+   <select id="searchTest" resultType="org.zerock.domain.ReviewVO">
+  	
+  	<![CDATA[
+	  	select * from review_board
+	  	where
+  	]]>	
+  
+  	<trim suffix="and"> 
+	  	<foreach collection="map" index="key" item="val" 
+	  			separator="or" open="(" close=")">
+	  		<if test="key=='T'.toString()">
+	  			review_title like #{val}
+	  		</if> 
+	  		
+	  		<if test="key=='C'.toString()">
+	  			review_content like #{val}
+	  		</if> 
+
+	  		<if test="key=='W'.toString()">
+	  			writer_name like #{val}
+	  		</if> 
+	  		
+	  		<if test="key=='R'.toString()">
+	  			region like #{val}
+	  		</if> 
+	  	</foreach>
+    </trim>
+  	<![CDATA[
+  		rownum < 10
+  	]]>	
+  </select>
+
+
+  <!-- 등록 -->
+  <insert id="insertSelectKey" parameterType="org.zerock.domain.ReviewVO">
+    <selectKey keyProperty="review_id" resultType="long" order="BEFORE">
+      SELECT seq_review.NEXTVAL FROM dual
+    </selectKey>
+    INSERT INTO review_board (
+      review_id, review_title, restaurant_name, review_content,
+      writer_name, rating, count, region, register_date, filename
+    ) VALUES (
+      #{review_id}, #{review_title}, #{restaurant_name}, #{review_content},
+      #{writer_name}, #{rating}, #{count}, #{region}, SYSDATE , #{fileName, jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <!-- 단건 조회 -->
+  <select id="read" parameterType="long" resultMap="reviewMap">
+    SELECT * FROM review_board WHERE review_id = #{review_id}
+  </select>
+
+  <!-- 전체 목록 -->
+  <select id="getList" resultMap="reviewMap">
+    SELECT * FROM review_board ORDER BY review_id DESC
+  </select>
+
+  <!-- 페이징 + 검색 -->
+  <select id="getListWithPaging" parameterType="org.zerock.domain.Criterial" resultMap="reviewMap">
+    SELECT *
+    FROM (
+      SELECT ROWNUM rn, a.*
+      FROM (
+        SELECT * FROM review_board
+        <where>
+          <if test="keyword != null and keyword != '' and type != null and type != ''">
+            <include refid="criterial"/>
+          </if>
+        </where>
+        ORDER BY review_id DESC
+      ) a
+      WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE rn &gt;= #{startRow}
+  </select>
+
+  <!-- 총 개수 -->
+  <select id="getTotalCount" parameterType="org.zerock.domain.Criterial" resultType="int">
+    SELECT COUNT(*)
+    FROM review_board
+    <where>
+      <if test="keyword != null and keyword != '' and type != null and type != ''">
+        <include refid="criterial"/>
+      </if>
+    </where>
+  </select>
+
+ <!-- 수정 -->
+  <update id="update" parameterType="org.zerock.domain.ReviewVO">
+  UPDATE review_board
+  SET
+    review_title = #{review_title},
+    restaurant_name = #{restaurant_name},
+    review_content = #{review_content},
+    writer_name = #{writer_name},
+    rating = #{rating},
+    region = #{region},
+    fileName = #{fileName}
+  WHERE review_id = #{review_id}
+</update>
+
+  <!-- 삭제 -->
+  <delete id="delete" parameterType="long">
+    DELETE FROM review_board WHERE review_id = #{review_id}
+  </delete>
+  
+<update id="increaseViewCount" parameterType="long">
+  UPDATE review_board
+  SET count = count + 1
+  WHERE review_id = #{review_id}
+</update>
+
+</mapper>

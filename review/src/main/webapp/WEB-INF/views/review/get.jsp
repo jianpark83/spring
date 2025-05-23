@@ -10,7 +10,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="../resources/css/get_css.css">
     <script src="/resources/script/jquery-1.12.3.js"></script> <!-- 수정됨: 절대경로 사용 -->
-    <script src="/resources/script/list_script.js"></script> <!-- 수정됨: 절대경로 사용 -->
+    <script src="/resources/script/get_script.js"></script> <!-- 수정됨: 절대경로 사용 -->
 </head>
 <body>
 
@@ -92,8 +92,15 @@
                     <div class="main-card">
                         <!-- 동적으로 출력 -->
                         <h3>${review.review_title}</h3>
+        
                         <div class="edit-actions">
-		                    <button type="button" class="btn-list"  onclick="location.href='/review/list';">리스트</button>
+                        <input type="hidden" id="pageNum" value="${pageMaker.cri.pageNum}" />
+						<input type="hidden" id="amount" value="${pageMaker.cri.amount}" />
+						<input type="hidden" id="type" value="${pageMaker.cri.type}" />
+						<input type="hidden" id="keyword" value="${pageMaker.cri.keyword}" />
+                        
+		                    <button type="button" class="btn-list" 
+		                    onclick="location.href='/review/list?review_id=${review.review_id}&pageNum=${cri.pageNum}&amount=${cri.amount}&type=${cri.type}&keyword=${cri.keyword}';">리스트</button>
 		                    <button type="button" class="btn-modifty" 
 		                    onclick="location.href='/review/modify?review_id=${review.review_id}&pageNum=${cri.pageNum}&amount=${cri.amount}&type=${cri.type}&keyword=${cri.keyword}';">수정</button>
 	               		</div>
@@ -141,9 +148,5 @@
     </div>
     </div>
 
-</body>
-</html>
-
-    
 </body>
 </html>

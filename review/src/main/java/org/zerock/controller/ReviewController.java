@@ -30,9 +30,7 @@ public class ReviewController {
 		log.info("list.........." + cri);
 		
 		List<ReviewVO> list = service.getList(cri);
-		model.addAttribute("list", list);
-	  //model.addAttribute("pageMaker", new PageDTO(cri, 272));
-		
+		model.addAttribute("list", list);		
 		model.addAttribute("pageMaker", new PageDTO(cri, service.getTotal(cri)));
 	}
 	
@@ -46,15 +44,10 @@ public class ReviewController {
 		service.register(review);
 		
 		rttr.addFlashAttribute("result", review.getReview_id());
-		 // 로그로 result 확인
 	    log.info("result ID: " + review.getReview_id());
 	    
 		return "redirect:/review/list";
-	  //DB의 변경이 일어나면 redirect방식으로 반드시 화면전환을 시켜야 한다(도배방지)
-	  //PRG 패턴 : Post -> Redirect -> Get 
-	  //PRG 패턴을 사용하는 이유는 멱등성 때문에
-	  //게시글 작성을 Post로 전송 후 응답을 redirect가 아닌 forward로 처리할 경우
-	  //새로고침 시 게시글 작성이 중복해서 처리될 수 있다
+
 	}
 	
 	@GetMapping({"/get", "/modify"})
@@ -63,8 +56,9 @@ public class ReviewController {
 		
 		service.updateCount(review_id);  //조회수 증가
 		
-		model.addAttribute("review",service.get(review_id));  
-	  //model.addAttribute("cri", cri);
+	    model.addAttribute("pageMaker", new PageDTO(cri, service.getTotal(cri)));
+	    model.addAttribute("review",service.get(review_id));  
+
 	}
 	
 	@PostMapping("/remove")

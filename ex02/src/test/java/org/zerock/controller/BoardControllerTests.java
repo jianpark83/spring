@@ -18,21 +18,21 @@ import lombok.extern.log4j.Log4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
-	"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml", 
-	"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
+	"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
+	"file:src/main/webapp/WEB-INF/spring/root-context.xml"
+})
 @Log4j
-@WebAppConfiguration  
+@WebAppConfiguration   
 public class BoardControllerTests {
 
-	@Autowired  //Web 관련 bean(메모리에 생성된 객체) 관리
+	@Autowired  // 웹 관련 빈(생성된 객체) 관리
 	private WebApplicationContext ctx;
 	
-	//server 실행하지 않고도 test 가능(HTTP 요청과 응답을 시뮬레이션하기 위한 도구)
-	private MockMvc mockMvc;   
+	//서버를 실행 하지않고도 HTTP 요청과 응답을 시뮬레인션하기 위한 도구
+	private MockMvc mockMvc;  
 	
-	@Before  
-	//Spring MVC 애플리케이션에서 통합 테스트 수행, 
-	//실제 서버를 실행하지 않고 컨트롤러 동작을 테스트 가능
+	@Before  //Spring MVC 애플리케이션에서 통합 테스트 수행, 실제 서버를 실행하지 않고
+	// 컨트롤러 동작을 테스트 가능
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 	}
@@ -43,43 +43,46 @@ public class BoardControllerTests {
 				mockMvc.perform(MockMvcRequestBuilders.get("/board/list"))
 				.andReturn()
 				.getModelAndView()
-				.getModelMap());
+				.getModelMap()
+		);
 	}
-
+	
 	@Test
 	public void testRegister() throws Exception{
 		String resultPage = mockMvc.perform(MockMvcRequestBuilders
 				.post("/board/register")
 				.param("title", "테스트 새글 제목")
 				.param("content", "테스트 새글 내용")
-				.param("writer", "테스트 새글 작성자"))
-				.andReturn()
+				.param("writer", "테스트 새글 작성자")
+				).andReturn()
 				.getModelAndView()
 				.getViewName();
 		
-		log.info("==========>" + resultPage);
+		log.info("=============> " + resultPage);
 	}
 	
 	@Test
 	public void testget() throws Exception {
 		log.info(
-				mockMvc.perform(MockMvcRequestBuilders.get("/board/get")
-				.param("bno", "6"))
+				mockMvc.perform(MockMvcRequestBuilders
+				.get("/board/get")
+				.param("bno", "3"))
 				.andReturn()
 				.getModelAndView()
-				.getModelMap());
+				.getModelMap()
+		);
 	}
 	
 	@Test
 	public void testDelete() throws Exception{
 		String resultPage = mockMvc.perform(MockMvcRequestBuilders
 				.post("/board/remove")
-				.param("bno", "16"))
-				.andReturn()
+				.param("bno", "16")
+				).andReturn()
 				.getModelAndView()
 				.getViewName();
 		
-		log.info("==========>" + resultPage);
+		log.info("=============> " + resultPage);
 	}
 	
 	@Test
@@ -89,11 +92,28 @@ public class BoardControllerTests {
 				.param("title", "수정 새글 제목")
 				.param("content", "수정 새글 내용")
 				.param("writer", "수정 새글 작성자")
-				.param("bno", "14"))
-				.andReturn()
+				.param("bno", "15")
+				).andReturn()
 				.getModelAndView()
 				.getViewName();
 		
-		log.info("==========>" + resultPage);
+		log.info("=============> " + resultPage);
 	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

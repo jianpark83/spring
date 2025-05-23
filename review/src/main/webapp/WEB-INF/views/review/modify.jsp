@@ -89,7 +89,7 @@
     <div id="list">
     
     <main class="content">
-        <form class="main-card" method="post">
+        <form class="main-card" action="/review/modify" method="post">
         
         <!-- 수정,삭제 버튼 클릭 시 pageNum, amount값 전달 -->
     	<%-- <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
