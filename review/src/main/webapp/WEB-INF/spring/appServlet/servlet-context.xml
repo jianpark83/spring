@@ -14,6 +14,9 @@
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
+	
+	<!-- 이미지 업로드 폴더 정적 리소스 매핑 추가 -->
+	<resources mapping="/reviewImage/**" location="file:///D:/upload/review/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -21,16 +24,11 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<!-- 파일 업로드 설정 -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="defaultEncoding" value="utf-8"></beans:property>
-		<!-- 1024*1024*10 bytes 10MB -->
-		<beans:property name="maxUploadSize" value="104857560"></beans:property>
-		<!-- 1024*1024*2 bytes 2MB -->
-		<beans:property name="maxUploadSizePerFile" value="2097152"></beans:property>
-		<beans:property name="uploadTempDir" value="file:/C:/upload/tmp"></beans:property>
-		<beans:property name="maxInMemorySize" value="10485756"></beans:property>
+	    <beans:property name="defaultEncoding" value="utf-8" />
+	    <beans:property name="maxUploadSize" value="10485760" /> <!-- 10MB -->
 	</beans:bean>
+	
 	
 	<!-- Web에서 사용하는 거 bean 등록 -->
 	<context:component-scan base-package="org.zerock.controller" />

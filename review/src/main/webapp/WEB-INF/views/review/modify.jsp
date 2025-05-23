@@ -89,21 +89,13 @@
     <div id="list">
     
     <main class="content">
-        <form class="main-card" action="/review/modify" method="post">
-        
-        <!-- 수정,삭제 버튼 클릭 시 pageNum, amount값 전달 -->
-    	<%-- <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
-        <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>  
-        <!-- 수정,삭제 버튼 클릭 시 type, keyword값 전달 -->   
-        <input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>       	
-        <input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'> --%>
+        <form class="main-card" action="/review/modify" method="post" enctype="multipart/form-data">
         
         <input type="hidden" name="pageNum" value="${cri.pageNum}" />
         <input type="hidden" name="amount" value="${cri.amount}" />
         <input type="hidden" name="type" value="${cri.type}" />
         <input type="hidden" name="keyword" value="${cri.keyword}" />
-        
-        
+                
         <input type="hidden" name="review_id" value="${review.review_id}"/> 
         
         <!-- 제목 -->
@@ -142,12 +134,12 @@
         <textarea id="review_content" name="review_content" rows="5"><c:out value='${review.review_content}'/></textarea>
 
         <!-- 리뷰 사진 (추후 처리) -->
-        <label for="review-img"><strong>리뷰 사진:</strong></label>
-        <input type="file" id="review-img" name="review-img" accept="image/*" />
+        <label for="imageFile"><strong>리뷰 사진:</strong></label>
+        <input type="file" id="imageFile" name="file" />
 
         <!-- 제출 버튼 -->
          <div class="edit-actions">
-            <button type="button" data-oper='modify' class="btn-update">수정</button>
+            <button type="submit" data-oper='modify' class="btn-update">수정</button>
             <button type="button" data-oper='remove' class="btn-delete">삭제</button>
             <button type="button" data-oper='list' class="btn-writer">리스트</button>
         </div>

@@ -12,9 +12,9 @@ public interface ReviewMapper {
 	
 	public List<ReviewVO> getList();
 	
-	public void insert(ReviewVO review);  //DB에 데이터 저장
+	public void insert(ReviewVO review);  
 	
-	public void insertSelectKey(ReviewVO review);  //DB에 저장할 때 등록번호 확인
+	public void insertSelectKey(ReviewVO review);  
 	
 	public int delete(Long review_id);
 	

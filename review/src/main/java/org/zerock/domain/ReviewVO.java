@@ -5,6 +5,7 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /*
@@ -25,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class ReviewVO {
 	private Long review_id;
 	private String review_title;
@@ -35,5 +37,5 @@ public class ReviewVO {
 	private int rating;
 	private int count;
 	private String region;
-
+	private String imagePath;
 }

@@ -12,10 +12,9 @@ import lombok.extern.log4j.Log4j;
 
 @Service
 @Log4j
-@RequiredArgsConstructor //생성자 주입
+@RequiredArgsConstructor 
 public class ReviewServiceImpl implements ReviewService{
 	
-	//@RequiredArgsConstructor + final
 	private final ReviewMapper mapper;
 	
 	@Override
@@ -33,7 +32,7 @@ public class ReviewServiceImpl implements ReviewService{
 	@Override
 	public boolean modify(ReviewVO review) {
 		log.info("modify............");
-		return mapper.update(review) == 1;                     //mapper.update(board) -> 1일 경우 true (update가 안되면 0값이 도출되기 때문에)
+		return mapper.update(review) == 1;                     
 	}
 
 	@Override

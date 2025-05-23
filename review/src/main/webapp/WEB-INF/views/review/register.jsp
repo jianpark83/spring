@@ -89,7 +89,7 @@
     <div id="list">
     
     <main class="content">
-        <form class="main-card" action="/review/register" method="post">
+        <form class="main-card" action="/review/register" method="post" enctype="multipart/form-data">
         
         <!-- 제목 -->
         <label for="review_title"><strong>제목:</strong></label>
@@ -127,8 +127,8 @@
         <textarea id="review_content" name="review_content" rows="5"></textarea>
 
         <!-- 리뷰 사진 (추후 처리) -->
-        <label for="review-img"><strong>리뷰 사진:</strong></label>
-        <input type="file" id="review-img" name="review-img" accept="image/*" />
+        <label for="imageFile"><strong>리뷰 사진:</strong></label>
+        <input type="file" id="imageFile" name="file" />
 
         <!-- 제출 버튼 -->
         <div class="edit-actions">

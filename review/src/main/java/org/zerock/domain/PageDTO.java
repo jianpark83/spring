@@ -17,11 +17,11 @@ public class PageDTO {
 	//페이지 정보, 페이지당 레코드 개수
 	private Criteria cri;
 	
-	public PageDTO(Criteria cri, int total) {  //생성자
+	public PageDTO(Criteria cri, int total) {  
 		this.cri = cri;                                              
 		this.total = total;                                          
 		
-		//endPage            //무조건 올림
+		//endPage            
 		this.endPage = (int)(Math.ceil(cri.getPageNum()/10.0))*10;   
 		
 		this.startPage = this.endPage - 9;                           

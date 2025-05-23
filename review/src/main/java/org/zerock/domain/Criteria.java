@@ -12,8 +12,8 @@ public class Criteria {
 	private int pageNum;  //페이지
 	private int amount;   //페이지 개수
 	
-	private String type;    //검색조건(제목,내용,작성자)
-	private String keyword; //검색조건
+	private String type;    //검색조건(제목,내용,작성자,지역)
+	private String keyword; //검색키워드
 	
 	public Criteria() {
 		this(1, 10);

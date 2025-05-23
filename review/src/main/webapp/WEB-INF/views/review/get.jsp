@@ -118,7 +118,11 @@
                             <p>${review.review_content}</p> <!-- 리뷰 내용 출력 -->
                         </div>
 
-            <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA2MjZfMjM5%2FMDAxNzE5MzY1MTEyNTU1.p5ZDtbFV1MNRBGl2VYHufZKYzyBrHBR8HTTCWJPXrqUg.KNzAFt5pUrAWRNZs6MQupItChuqzHCm_aAez2yflapcg.JPEG%2Fimage_6.jpg&type=sc960_832" alt="리뷰 사진" class="review-img" />
+                        <c:if test="${not empty review.imagePath}">
+						  <div class="review-image-box">
+						    <img src="${review.imagePath}" alt="리뷰 이미지" style="width: 400px; margin-top: 20px;" />
+						  </div>
+						</c:if>
         </div>
         </main>
 

@@ -1,6 +1,8 @@
 package org.zerock.controller;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.ReviewVO;
 import org.zerock.domain.Criteria;
@@ -39,7 +42,22 @@ public class ReviewController {
 	}
 	
 	@PostMapping("/register")
-	public String register(ReviewVO review, RedirectAttributes rttr) {
+	public String register(ReviewVO review, 
+			@RequestParam("file") MultipartFile file, RedirectAttributes rttr) {
+		
+		if (file != null && !file.isEmpty()) {
+	        String uploadFolder = "D:/upload/review";
+	        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+	        File saveFile = new File(uploadFolder, fileName);
+
+	        try {
+	            file.transferTo(saveFile);
+	            review.setImagePath("/reviewImage/" + fileName); // DB에 저장될 경로
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+		
 		log.info("resister..........");
 		service.register(review);
 		
@@ -77,9 +95,30 @@ public class ReviewController {
 	}
 	
 	@PostMapping("/modify")
-	public String modify(ReviewVO review, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
-		log.info("modify..........");
+	public String modify(@RequestParam("file") MultipartFile file, ReviewVO review, 
+			@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		
+		 // 기존 이미지 경로 유지
+	    if (file != null && !file.isEmpty()) {
+	        String uploadFolder = "D:/upload/review";
+	        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+	        File saveFile = new File(uploadFolder, fileName);
+
+	        try {
+	            file.transferTo(saveFile);
+	            review.setImagePath("/reviewImage/" + fileName); // 새 이미지 경로
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    } else {
+	        // 기존 리뷰 정보에서 이미지 경로 유지
+	        ReviewVO origin = service.get(review.getReview_id());
+	        if (origin != null) {
+	            review.setImagePath(origin.getImagePath());
+	        }
+	    }
+		
+		log.info("modify..........");
 		service.modify(review);  //수정
 		rttr.addFlashAttribute("result", "수정이 완료되었습니다.");
 		

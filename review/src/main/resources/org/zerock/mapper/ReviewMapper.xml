@@ -7,61 +7,64 @@
 
   <!-- 리뷰 읽기 -->
   <select id="read" resultType="org.zerock.domain.ReviewVO">
-    SELECT * FROM review_board WHERE review_id = #{review_id}
+    select review_id, review_title, restaurant_name, review_content, 
+    writer_name, rating, region, register_date, count, image_path as imagePath 
+    from review_board 
+    where review_id = #{review_id}
   </select>
 
   <!-- 리뷰 리스트 -->
   <select id="getList" resultType="org.zerock.domain.ReviewVO">
-    SELECT * FROM review_board WHERE review_id > 0
+    select * from review_board where review_id > 0
   </select>
 
   <!-- 리뷰 등록 -->
   <insert id="insert">
-    INSERT INTO review_board 
-    (review_id, review_title, restaurant_name, review_content, register_date, writer_name, rating, region) 
-    VALUES 
-    (re_board.nextval, #{review_title}, #{restaurant_name}, #{review_content}, SYSDATE, #{writer_name}, #{rating}, #{region})
-  </insert>
+	  insert into review_board 
+	  (review_id, review_title, restaurant_name, review_content, register_date, writer_name, rating, region, image_path) 
+	  values 
+	  (re_board.nextval, #{review_title}, #{restaurant_name}, #{review_content}, SYSDATE, #{writer_name}, #{rating}, #{region}, #{imagePath})
+</insert>
 
   <!-- 리뷰 등록 SelectKey -->
   <insert id="insertSelectKey">
     <selectKey keyProperty="review_id" order="BEFORE" resultType="long">
-      SELECT re_board.nextval FROM dual
+      select re_board.nextval from dual
     </selectKey>
-    INSERT INTO review_board 
-    (review_id, review_title, restaurant_name, review_content, register_date, writer_name, rating, region) 
-    VALUES 
+    insert into review_board 
+    (review_id, review_title, restaurant_name, review_content, register_date, writer_name, rating, region, image_path) 
+    values 
     (re_board.nextval, #{review_title}, #{restaurant_name}, #{review_content},
      <if test="register_date != null">#{register_date, jdbcType=TIMESTAMP}</if>
      <if test="register_date == null">SYSDATE</if>,
-     #{writer_name}, #{rating}, #{region})
+     #{writer_name}, #{rating}, #{region}, #{imagePath})
   </insert>
 
   <!-- 리뷰 삭제 -->
   <delete id="delete">
-    DELETE FROM review_board WHERE review_id = #{review_id}
+    delete from review_board where review_id = #{review_id}
   </delete>
 
   <!-- 리뷰 수정 -->
   <update id="update">
-    UPDATE review_board 
-    SET review_title = #{review_title}, 
+    update review_board 
+    set review_title = #{review_title}, 
         restaurant_name = #{restaurant_name},
         review_content = #{review_content}, 
         rating = #{rating},
-        region = #{region}
-    WHERE review_id = #{review_id}
+        region = #{region},
+        image_path = #{imagePath}
+    where review_id = #{review_id}
   </update>
 
   <!-- 조회수 증가 -->
   <update id="updateCount">
-    UPDATE review_board
-    SET count = count + 1
-    WHERE review_id = #{review_id}
+    update review_board
+    set count = count + 1
+    where review_id = #{review_id}
   </update>
 
-  <!-- ✅ 검색 조건 (괄호 추가) -->
-<!-- ✅ 검색 조건 (괄호 추가) -->
+  <!-- 검색 조건 (괄호 추가) -->
   <sql id="criteria"> 
     <trim prefix="(" suffix=")" prefixOverrides="OR" suffixOverrides="OR">
       <foreach collection="typeArr" item="type" separator="OR">
@@ -81,31 +84,31 @@
     </trim>
   </sql>
 
-  <!-- ✅ 페이징 처리 (중첩 SELECT + rownum) -->
+  <!-- 페이징 처리 (중첩 select + rownum) -->
   <select id="getListWithPaging" resultType="org.zerock.domain.ReviewVO">
     <![CDATA[
-    SELECT * FROM (
-      SELECT rownum rn, A.*
-      FROM (
-        SELECT review_id, review_title, restaurant_name, review_content,
-               writer_name, rating, region, register_date, count
-        FROM review_board
+    select * from (
+      select rownum rn, A.*
+      from (
+        select review_id, review_title, restaurant_name, review_content,
+               writer_name, rating, region, register_date, count, image_path
+        from review_board
     ]]>
       <where>
         <include refid="criteria"/>
       </where>
     <![CDATA[
-        ORDER BY review_id DESC
+        order by review_id desc
       ) A
-      WHERE rownum <= #{pageNum} * #{amount}
+      where rownum <= #{pageNum} * #{amount}
     )
-    WHERE rn > (#{pageNum} - 1) * #{amount}
+    where rn > (#{pageNum} - 1) * #{amount}
     ]]>
   </select>
 
-  <!-- ✅ 총 레코드 수 조회 -->
+  <!-- 총 레코드 수 조회 -->
   <select id="getTotalCount" resultType="int">
-    SELECT COUNT(*) FROM review_board
+    select count(*) from review_board
     <where>
       <include refid="criteria" />
     </where>
