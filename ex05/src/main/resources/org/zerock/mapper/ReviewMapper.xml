@@ -16,7 +16,6 @@
     <result property="rating" column="RATING" />
     <result property="count" column="COUNT" />
     <result property="region" column="REGION" />
-    <result property="fileName" column="filename" />
   </resultMap>
 
   <!-- 🔍 검색 조건 SQL -->
@@ -24,54 +23,22 @@
   <trim prefix="(" suffix=")" prefixOverrides="OR">
     <foreach collection="typeArr" item="type" separator=" OR ">
       <choose>
-        <when test='type == "T"'>
+        <when test='"T" == type'>
           review_title LIKE '%' || #{keyword} || '%'
         </when>
-        <when test='type == "C"'>
-          review_content LIKE '%' || #{keyword} || '%'
-        </when>
-        <when test='type == "W"'>
+        <when test='"W" == type'>
           writer_name LIKE '%' || #{keyword} || '%'
         </when>
-        <when test='type == "R"'>
+        <when test='"C" == type'>
+          review_content LIKE '%' || #{keyword} || '%'
+        </when>
+        <when test='"R" == type'>
           region LIKE '%' || #{keyword} || '%'
         </when>
       </choose>
     </foreach>
   </trim>
 </sql>
-  
-   <select id="searchTest" resultType="org.zerock.domain.ReviewVO">
-  	
-  	<![CDATA[
-	  	select * from review_board
-	  	where
-  	]]>	
-  
-  	<trim suffix="and"> 
-	  	<foreach collection="map" index="key" item="val" 
-	  			separator="or" open="(" close=")">
-	  		<if test="key=='T'.toString()">
-	  			review_title like #{val}
-	  		</if> 
-	  		
-	  		<if test="key=='C'.toString()">
-	  			review_content like #{val}
-	  		</if> 
-
-	  		<if test="key=='W'.toString()">
-	  			writer_name like #{val}
-	  		</if> 
-	  		
-	  		<if test="key=='R'.toString()">
-	  			region like #{val}
-	  		</if> 
-	  	</foreach>
-    </trim>
-  	<![CDATA[
-  		rownum < 10
-  	]]>	
-  </select>
 
 
   <!-- 등록 -->
@@ -81,10 +48,10 @@
     </selectKey>
     INSERT INTO review_board (
       review_id, review_title, restaurant_name, review_content,
-      writer_name, rating, count, region, register_date, filename
+      writer_name, rating, count, region, register_date
     ) VALUES (
       #{review_id}, #{review_title}, #{restaurant_name}, #{review_content},
-      #{writer_name}, #{rating}, #{count}, #{region}, SYSDATE , #{fileName, jdbcType=VARCHAR}
+      #{writer_name}, #{rating}, #{count}, #{region}, SYSDATE
     )
   </insert>
 
@@ -128,29 +95,23 @@
     </where>
   </select>
 
- <!-- 수정 -->
+  <!-- 수정 -->
   <update id="update" parameterType="org.zerock.domain.ReviewVO">
-  UPDATE review_board
-  SET
-    review_title = #{review_title},
-    restaurant_name = #{restaurant_name},
-    review_content = #{review_content},
-    writer_name = #{writer_name},
-    rating = #{rating},
-    region = #{region},
-    fileName = #{fileName}
-  WHERE review_id = #{review_id}
-</update>
+    UPDATE review_board
+    SET
+      review_title = #{review_title},
+      restaurant_name = #{restaurant_name},
+      review_content = #{review_content},
+      writer_name = #{writer_name},
+      rating = #{rating},
+      count = #{count},
+      region = #{region}
+    WHERE review_id = #{review_id}
+  </update>
 
   <!-- 삭제 -->
   <delete id="delete" parameterType="long">
     DELETE FROM review_board WHERE review_id = #{review_id}
   </delete>
-  
-<update id="increaseViewCount" parameterType="long">
-  UPDATE review_board
-  SET count = count + 1
-  WHERE review_id = #{review_id}
-</update>
 
 </mapper>

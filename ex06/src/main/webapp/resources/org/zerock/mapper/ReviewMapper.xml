@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.mapper.ReviewMapper">
+
+  <!-- 등록 -->
+  <insert id="insert" parameterType="org.zerock.domain.ReviewVO">
+    insert into review_board (
+      review_id, review_title, restaurant_name, review_content,
+      writer_name, rating, count, region, register_date
+    ) values (
+      seq_review.nextval, #{review_title}, #{restaurant_name}, #{review_content},
+      #{writer_name}, #{rating}, #{count}, #{region}, sysdate
+    )
+  </insert>
+
+  <!-- 등록 + key 받기 -->
+  <insert id="insertSelectKey" parameterType="org.zerock.domain.ReviewVO">
+    <selectKey keyProperty="review_id" resultType="long" order="BEFORE">
+      select seq_review.nextval from dual
+    </selectKey>
+    insert into review_board (
+      review_id, review_title, restaurant_name, review_content,
+      writer_name, rating, count, region, register_date
+    ) values (
+      #{review_id}, #{review_title}, #{restaurant_name}, #{review_content},
+      #{writer_name}, #{rating}, #{count}, #{region}, sysdate
+    )
+  </insert>
+
+  <!-- 조회 -->
+  <select id="read" resultType="org.zerock.domain.ReviewVO">
+    select
+      review_id, review_title, restaurant_name, review_content,
+      writer_name, register_date, rating, count, region
+    from review_board
+    where review_id = #{review_id}
+  </select>
+
+  <!-- 목록 -->
+  <select id="getList" resultType="org.zerock.domain.ReviewVO">
+    select
+      review_id, review_title, restaurant_name, review_content,
+      writer_name, register_date, rating, count, region
+    from review_board
+    order by review_id desc
+  </select>
+
+  <!-- 검색 조건 SQL 분리 -->
+<sql id="criterial">
+  <trim prefix="(" suffix=")" prefixOverrides="OR">
+    <foreach collection="typeArr" item="item" separator=" OR ">
+      <choose>
+        <when test="item eq 'T'">review_title LIKE '%' || #{keyword} || '%'</when>
+        <when test="item eq 'W'">writer_name LIKE '%' || #{keyword} || '%'</when>
+        <when test="item eq 'C'">review_content LIKE '%' || #{keyword} || '%'</when>
+        <when test="item eq 'R'">region LIKE '%' || #{keyword} || '%'</when>
+      </choose>
+    </foreach>
+  </trim>
+</sql>
+
+<!-- 페이징 목록 + 검색 + 정렬 -->
+<select id="getListWithPaging" parameterType="org.zerock.domain.Criterial"
+        resultType="org.zerock.domain.ReviewVO">
+  SELECT *
+  FROM (
+    SELECT ROWNUM rn, a.*
+    FROM (
+      SELECT
+        review_id, review_title, restaurant_name, review_content,
+        writer_name, register_date, rating, count, region
+      FROM review_board
+      <where>
+        <if test="keyword != null and keyword != '' and type != null and type != ''">
+          <include refid="criterial"/>
+        </if>
+      </where>
+      <choose>
+        <when test="sort == 'DESC'">
+          ORDER BY review_id DESC
+        </when>
+        <otherwise>
+          ORDER BY review_id ASC
+        </otherwise>
+      </choose>
+    ) a
+    WHERE ROWNUM &lt;= #{endRow}
+  )
+  WHERE rn &gt;= #{startRow}
+</select>
+
+<!-- 총 개수 -->
+<select id="getTotalCount" parameterType="org.zerock.domain.Criterial" resultType="int">
+  SELECT COUNT(*) FROM review_board
+  <where>
+    <if test="keyword != null and keyword != '' and type != null and type != ''">
+      <include refid="criterial"/>
+    </if>
+  </where>
+</select>
+  
+  <!-- 수정 -->
+  <update id="update" parameterType="org.zerock.domain.ReviewVO">
+    update review_board
+    set
+      review_title = #{review_title},
+      restaurant_name = #{restaurant_name},
+      review_content = #{review_content},
+      writer_name = #{writer_name},
+      rating = #{rating},
+      count = #{count},
+      region = #{region}
+    where review_id = #{review_id}
+  </update>
+
+  <!-- 삭제 -->
+  <delete id="delete">
+    delete from review_board where review_id = #{review_id}
+  </delete>
+
+</mapper>

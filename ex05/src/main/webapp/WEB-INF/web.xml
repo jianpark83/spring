@@ -23,16 +23,20 @@
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		
+		<multipart-config>
+			<location>c:\\upload\\temp</location>
+			<max-file-size>20971520</max-file-size> <!-- 1MB * 20 => 20M -->
+			<max-request-size>41943040</max-request-size> <!-- 40M -->
+			<file-size-threshold>20971520</file-size-threshold> <!-- 20M -->
+		</multipart-config>
+		
 	</servlet>
 		
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
-	 <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  	</properties>
 
 	<!-- 한글 인코딩 Strat -->
 	<filter>
@@ -54,7 +58,4 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<!-- 한글 인코딩 End -->
-	
-	
-	
 </web-app>
