@@ -30,7 +30,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 	
 		log.warn("ROLE NAMES: " + roleNames);
 		
-		if(roleNames.contains("ROLE_ADMIN")) {
+		if(roleNames.contains("ROLE_ADMIN")) {   //권한에 따라 페이지를 넘겨준다
 			response.sendRedirect("/sample/admin");
 			return;
 		}else if(roleNames.contains("ROLE_MEMBER")){
